@@ -7,21 +7,21 @@ import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
 import 'package:web_socket_channel/io.dart';
 
-final String _rpcUrl = "http://192.168.0.19:7545";
-final String _wsUrl = "ws://192.168.0.19:7545";
+final String _rpcUrl = "http://192.168.1.63:7545";
+final String _wsUrl = "ws://192.168.1.63:7545";
 final String _privatekey =
-    "3b67bb58dc6638ce52523516324c557657921f532e51199862dde7e471cfce65"; //phlebomotomist
+    "a79ed63843be058dcfc2bb9d639619258e78dd8583425eac97525883fcc7c3ef"; //phlebomotomist
 final String _privatekey1 =
-    "99797b94cf247cc833351f43a007b525988257d1b1c24b78cb85ec30df33b270";
+    "c9ac1d2c260f0419fc42c594e37afa39f581b6dde66382484f829e13054607e0";
 //transpoter
 final String _privatekey2 =
-    "78bc8bf5daea2fe4ef1b8b3b6220692213a33e0381ef691aab9c0256bc0f0205"; //Doctor
+    "fc811665c20d384aa67c6854295bb642a1b05a6f882db1c5d5243bafc2d478c9"; //Doctor
 
 final String _privatekey3 =
-    "b6ce2c516627f59168be21e75318a6323ffe3078aa1ff40f91b932da4cf8ae3c"; //Technician
+    "b27df960a8f0c610fb4b8c16ff8d0c6570b70309de8bb96abc34aa8043768acb"; //Technician
 
 final String _privatekey4 =
-    "fb79911c4521e5825edd1b24f503d2b7bdbe3992f932f25995801a08fd5a6f11"; //administrator
+    "07287f72363aff66a918f4e566546986ac45c2320cf6498aed5e32241a8e0804"; //administrator
 
 final client = Web3Client(
   _rpcUrl,
@@ -357,4 +357,82 @@ Future<void> donated(int donner) async {
   final result = await client.sendTransaction(creds, transaction);
 
   print(result);
+}
+
+String stateString = "";
+Future<String> stateDonner(int donner) async {
+  // call getABI() to initialize _abiCode and _ContractAddress
+  final contract = await getDeployedContract();
+
+  // Create a transaction to call the smart contract function
+  final function = contract.function("States");
+  final parameters = [BigInt.from(donner)]; // pass the function parameters here
+  final gasPrice = EtherAmount.inWei(BigInt.one);
+  const maxGas = 200000;
+  final transaction = Transaction.callContract(
+    contract: contract,
+    function: function,
+    maxGas: maxGas,
+    gasPrice: gasPrice,
+    parameters: parameters,
+  );
+  final creds = EthPrivateKey.fromHex(_privatekey4);
+
+  //final result = await client.sendTransaction(creds, transaction);
+  final result = await client.call(
+      contract: contract, function: function, params: parameters);
+  final returnValue = result[0] as String;
+  return (returnValue);
+}
+
+String Bank = "";
+Future<String> deliverBank() async {
+  // call getABI() to initialize _abiCode and _ContractAddress
+  final contract = await getDeployedContract();
+
+  // Create a transaction to call the smart contract function
+  final function = contract.function("getCount");
+  final parameters = []; // pass the function parameters here
+  final gasPrice = EtherAmount.inWei(BigInt.one);
+  const maxGas = 200000;
+  final transaction = Transaction.callContract(
+    contract: contract,
+    function: function,
+    maxGas: maxGas,
+    gasPrice: gasPrice,
+    parameters: parameters,
+  );
+  final creds = EthPrivateKey.fromHex(_privatekey2);
+
+  //final result = await client.sendTransaction(creds, transaction);
+  final result = await client.call(
+      contract: contract, function: function, params: parameters);
+  final Bank = result[0].toString();
+  return (Bank);
+}
+
+String Hospital = "";
+Future<String> deliverHopital() async {
+  // call getABI() to initialize _abiCode and _ContractAddress
+  final contract = await getDeployedContract();
+
+  // Create a transaction to call the smart contract function
+  final function = contract.function("getApproved");
+  final parameters = []; // pass the function parameters here
+  final gasPrice = EtherAmount.inWei(BigInt.one);
+  const maxGas = 200000;
+  final transaction = Transaction.callContract(
+    contract: contract,
+    function: function,
+    maxGas: maxGas,
+    gasPrice: gasPrice,
+    parameters: parameters,
+  );
+  final creds = EthPrivateKey.fromHex(_privatekey2);
+
+  //final result = await client.sendTransaction(creds, transaction);
+  final result = await client.call(
+      contract: contract, function: function, params: parameters);
+  final Hospital = result[0].toString();
+  return (Hospital);
 }

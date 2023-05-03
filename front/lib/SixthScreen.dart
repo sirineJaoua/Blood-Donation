@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front/Mybutton.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:front/Connect_Blood.dart';
 
@@ -75,6 +76,7 @@ class _SixthScreenState extends State<SixthScreen> {
                 Expanded(
                   child: TextFormField(
                     controller: _id,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: ' ID'),
                   ),
                 ),
@@ -82,6 +84,7 @@ class _SixthScreenState extends State<SixthScreen> {
                 Expanded(
                   child: TextFormField(
                     controller: _amount,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: 'Amount'),
                   ),
                 ),
@@ -112,10 +115,7 @@ class _SixthScreenState extends State<SixthScreen> {
                 )),
                 // SizedBox(width: 60),
                 Expanded(
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                        primary: Colors.red[900],
-                        backgroundColor: Color.fromARGB(255, 158, 158, 158)),
+                  child: Mybutton(
                     onPressed: () async {
                       int amountt = int.tryParse(_amount.text) ?? 0;
                       int id = int.tryParse(_id.text) ?? 0;
@@ -130,7 +130,7 @@ class _SixthScreenState extends State<SixthScreen> {
                       _date.clear();
                       _resetDropdown();
                     },
-                    child: Text('Valid'),
+                    text: "Valid",
                   ),
                 ),
               ],

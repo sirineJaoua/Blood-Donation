@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:front/Approve.dart';
+
+import 'package:front/ButtonT.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:front/Connect_Blood.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,9 @@ class ThirdScreen extends StatefulWidget {
 }
 
 class _ThirdScreenState extends State<ThirdScreen> {
-  bool _isTextVisible = true;
+  String? _Bank;
+  String? _Hospital;
+
   @override
   TextEditingController _valueController = TextEditingController();
   void initState() {
@@ -23,96 +26,110 @@ class _ThirdScreenState extends State<ThirdScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<NotificationProvider>(
-        builder: (context, NotificationProvider, child) {
-      final msgS = NotificationProvider.notifications;
+    return Scaffold(
+      //drawer: NavBar(),
+      appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () async {
+              final bank = await deliverBank();
+              final hospital = await deliverHopital();
+              setState(() {
+                _Bank = bank;
+                _Hospital = hospital;
+              });
+              //if (_Bank != null && _Hospital != null)
+              final snackBar = SnackBar(
+                content: Text(
+                    'There are $_Bank blood units to tranfer to the Bank, and $_Hospital to transfer to the Hospital '),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  onPressed: () {
+                    // Some code to undo the change.
+                  },
+                ),
+              );
 
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.red[600],
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
+              // Find the ScaffoldMessenger in the widget tree
+              // and use it to show a SnackBar.
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              // Show the sidebar here
             },
           ),
-          title: Text('Blood Donation'),
+        ],
+        backgroundColor: Colors.red[600],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        body: Builder(builder: (BuildContext context) {
-          return Center(
-            child: Column(
-              //mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: 60),
-                Text("On your way to The Bank", style: TextStyle(fontSize: 20)),
-                SizedBox(height: 60),
-                MaterialButton(
-                  color: Colors.red[900],
-                  textColor: Colors.white,
-                  onPressed: () {
-                    startDelievery();
-                  },
-                  child: Text('Start Delievery'),
-                ),
-                SizedBox(height: 16),
-                MaterialButton(
-                  color: Colors.red[900],
-                  textColor: Colors.white,
-                  onPressed: () {
-                    endDelievery();
-                  },
-                  child: Text('End Delievery'),
-                ),
-                SizedBox(height: 60),
-                Divider(),
-                SizedBox(height: 60),
-                Text("On your way to The Hospital",
-                    style: TextStyle(fontSize: 20)),
-                SizedBox(height: 60),
-                MaterialButton(
-                  color: Colors.red[900],
-                  textColor: Colors.white,
-                  onPressed: () {
-                    toTheHospital();
-                  },
-                  child: Text('Start Delievery'),
-                ),
-                SizedBox(height: 16),
-                MaterialButton(
-                  color: Colors.red[900],
-                  textColor: Colors.white,
-                  onPressed: () {
-                    arrivedToHospital();
-                    setState(() {
-                      _isTextVisible = false;
-                    });
-                  },
-                  child: Text('End Delievery'),
-                ),
-                SizedBox(height: 20),
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: msgS.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final _msg = msgS[index];
-                      return _approvedIndices.contains(index)
-                          ? Container()
-                          : Row(
-                              children: [
-                                Text(
-                                  '${_msg.msg}',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.redAccent[700]),
-                                )
-                              ],
-                            );
-                    })
-              ],
+        title: Text('Transporter'),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              title: Text('Option 1'),
+              onTap: () {
+                // Handle option 1
+              },
             ),
-          );
-        }),
-      );
-    });
+            ListTile(
+              title: Text('Option 2'),
+              onTap: () {
+                // Handle option 2
+              },
+            ),
+          ],
+        ),
+      ),
+      body: Builder(builder: (BuildContext context) {
+        return Center(
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: 60),
+              Text("On your way to The Bank", style: TextStyle(fontSize: 20)),
+              SizedBox(height: 60),
+              ButtonT(
+                onPressed: () {
+                  startDelievery();
+                },
+                text: 'Start Delivery',
+              ),
+              SizedBox(height: 16),
+              ButtonT(
+                onPressed: () {
+                  endDelievery();
+                },
+                text: 'End Delivery',
+              ),
+              SizedBox(height: 60),
+              Divider(),
+              SizedBox(height: 60),
+              Text("On your way to The Hospital",
+                  style: TextStyle(fontSize: 20)),
+              SizedBox(height: 60),
+              ButtonT(
+                onPressed: () {
+                  toTheHospital();
+                },
+                text: 'Start Delivery',
+              ),
+              SizedBox(height: 16),
+              ButtonT(
+                onPressed: () {
+                  arrivedToHospital();
+                },
+                text: 'End Delivery',
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
+        );
+      }),
+    );
   }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:front/ButtonT.dart';
+import 'package:front/Mybutton.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:front/Connect_Blood.dart';
 
 EthereumAddress trans =
-    EthereumAddress.fromHex("0x737C75fa58eC66C627605b0544025cB5303B1964");
+    EthereumAddress.fromHex("0x706DBe6698508efD4393221257Bb3D7Bba72B987");
 
 EthereumAddress trans1 =
     EthereumAddress.fromHex("0xBCDccDc8a6bc89C34014c7D503C310A7c1F90D73");
@@ -34,7 +36,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 Navigator.pop(context);
               },
             ),
-            title: Text('Blood Donation'),
+            title: Text('Phlebotomist'),
           ),
           body: Center(
               child: Column(children: <Widget>[
@@ -43,20 +45,17 @@ class _SecondScreenState extends State<SecondScreen> {
               child: TextFormField(
                 controller: _valueController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Enter the Donner Id'),
+                decoration: InputDecoration(labelText: 'Enter the Donor Id'),
               ),
             ),
             Container(
-                child: TextButton(
-              style: TextButton.styleFrom(
-                  primary: Color.fromARGB(255, 248, 248, 248),
-                  backgroundColor: Colors.red[900]),
+                child: ButtonT(
               onPressed: () async {
                 int value = int.tryParse(_valueController.text) ?? 0;
                 await myFunction(value);
                 _valueController.clear();
               },
-              child: Text('Collect'),
+              text: 'Collect',
             )),
             SizedBox(height: 60),
             Container(
@@ -76,38 +75,29 @@ class _SecondScreenState extends State<SecondScreen> {
                 children: <Widget>[
                   Expanded(
                       child: Center(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                          primary: Colors.red[900],
-                          backgroundColor: Colors.grey[500]),
+                    child: Mybutton(
                       onPressed: () {
                         assign(trans);
                       },
-                      child: Text('Transporter 1'),
+                      text: 'Transporter 1',
                     ),
                   )),
                   Expanded(
                       child: Center(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                          primary: Colors.red[900],
-                          backgroundColor: Colors.grey[500]),
+                    child: Mybutton(
                       onPressed: () {
                         assign(trans1);
                       },
-                      child: Text('Transporter 2'),
+                      text: 'Transporter 2',
                     ),
                   )),
                   Expanded(
                     child: Center(
-                        child: TextButton(
-                      style: TextButton.styleFrom(
-                          primary: Colors.red[900],
-                          backgroundColor: Colors.grey[500]),
+                        child: Mybutton(
                       onPressed: () {
                         assign(trans2);
                       },
-                      child: Text('Transporter 3'),
+                      text: 'Transporter 3',
                     )),
                   ),
                 ],
